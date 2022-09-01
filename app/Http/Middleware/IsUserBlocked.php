@@ -16,9 +16,8 @@ class IsUserBlocked
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->check() && auth()->user()->blocked_till > now() && $request->route()->uri != 'blocked') {
-            $message = "Zostałeś zablokowany";
-            return redirect()->route('blocked')->with('message', $message);
+        if (auth()->check() && auth()->user()->blocked_till > time() && $request->route()->uri != 'blocked') {
+            return redirect()->route('blocked')->with('message', 'Zablokowany');
         }
         return $next($request);
     }

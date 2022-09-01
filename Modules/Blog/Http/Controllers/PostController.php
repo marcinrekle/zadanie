@@ -1,30 +1,32 @@
 <?php
 
-namespace Modules\Mail\Http\Controllers;
+namespace Modules\Blog\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-use Modules\Mail\Services\MailService;
+use Validator;
 
-class MailController extends Controller
+use Modules\Blog\Services\PostService;
+
+class PostController extends Controller
 {
     
     /**
-     * @var mailService
+     * @var postService
      */
-    protected $mailService;
+    protected $postService;
 
     /**
-     * MailController Constructor
+     * PostController Constructor
      *
-     * @param MailService $mailService
+     * @param PostService $postService
      *
      */
-    public function __construct(MailService $mailService)
+    public function __construct(PostService $postService)
     {
-        $this->mailService = $mailService;
+        $this->postService = $postService;
     }
 
     /**
@@ -33,7 +35,8 @@ class MailController extends Controller
      */
     public function index()
     {
-        return view('mail::index');
+        $posts = $this->postServices->getAll();
+        return view('blog::post.index', compact('posts'));
     }
 
     /**
@@ -42,7 +45,7 @@ class MailController extends Controller
      */
     public function create()
     {
-        return view('mail::index');
+        return view('blog::post.create');
     }
 
     /**
@@ -53,14 +56,13 @@ class MailController extends Controller
     public function store(Request $request)
     {
         $data = $request->only([
-            'sender',
-            'recipient',
             'title',
             'content',
+            'url',
         ]);
 
-        $mail = $this->mailService->sendMail($data);
-        
+        $post = $this->postService->add($data);
+
         return redirect()->back()->with(['success' => 'Udalo sie']); 
     }
 
@@ -69,9 +71,11 @@ class MailController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function show($id)
+    public function show($url)
     {
-        return view('mail::show');
+        //$post = Post::whereUrl($url)->first();
+        $post = $this->postService->get($url);
+        return view('blog::post.show',compact('post'));
     }
 
     /**
@@ -81,7 +85,7 @@ class MailController extends Controller
      */
     public function edit($id)
     {
-        return view('mail::edit');
+        return view('blog::post.edit');
     }
 
     /**
@@ -103,5 +107,14 @@ class MailController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'title' => 'required|email',
+			'content' => 'required|email',
+			'url' => 'required|min:3|max:255',
+        ]);
     }
 }

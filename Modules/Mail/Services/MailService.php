@@ -5,11 +5,12 @@ namespace Modules\Mail\Services;
 use InvalidArgumentException;
 use Validator;
 
-use Modules\Mail\Entities\Mail;
+use Modules\Mail\Entities\Mail;  
+use Modules\Mail\Jobs\SendMail;
 
 class MailService
 {
-	public function saveMailData(array $data)
+	public function sendMail(array $data)
 	{
 		$validator = $this->validator($data);
 
@@ -23,9 +24,15 @@ class MailService
 		$mail->title = $data['title'];
 		$mail->content = $data['content'];
 		$mail->save();
-
+        $this->addToQueue($mail);
 		return $mail->fresh();
 	}
+
+    protected function addToQueue(Mail $mail){
+        for ($i=0; $i < 50; $i++) { 
+            SendMail::dispatch($mail)->delay(now()->addSeconds(10));
+        }
+    }
 
 	protected function validator(array $data)
     {

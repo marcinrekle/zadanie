@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,8 @@ Route::group(['middleware' => ['auth', 'verified','blocked']], function(){
         return view('dashboard');
     })->name('dashboard');
     Route::get('/blocked', function() {
-        return view('blocked');
+        $blocked_till = Carbon::createFromTimestamp(auth()->user()->blocked_till);
+        return view('blocked',['blocked_till' => $blocked_till]);
     })->name('blocked');
     // Route::get('/dashboard', function() {
     //     return Inertia::render('Dashboard');

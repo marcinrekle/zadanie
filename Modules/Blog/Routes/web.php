@@ -11,6 +11,7 @@
 |
 */
 
-Route::prefix('blog')->group(function() {
-    Route::get('/', 'BlogController@index');
+Route::group(['prefix' => 'blog', 'middleware' => ['auth', 'verified', 'blocked']],function() {
+    Route::resource('/post', 'PostController', ['names' => 'post'])->except('show');
+    Route::get('/post/{url}','PostController@show')->name('post.show');
 });

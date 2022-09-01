@@ -11,9 +11,6 @@
 |
 */
 
-Route::prefix('mail')->group(function() {
-    Route::get('/', 'MailController@index');
-});
 
 Route::group(['prefix' => 'mail','middleware' => ['auth', 'verified','blocked']], function() {
     Route::resource('/', 'MailController',['names' => 'mail']);

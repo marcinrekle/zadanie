@@ -16,4 +16,5 @@
         {{-- Laravel Mix - JS File --}}
         {{-- <script src="{{ mix('js/blog.js') }}"></script> --}}
     </body>
+    @stack('scripts')
 </html>
