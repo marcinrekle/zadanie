@@ -24,8 +24,7 @@ Route::group(['middleware' => ['auth', 'verified','blocked']], function(){
         return view('dashboard');
     })->name('dashboard');
     Route::get('/blocked', function() {
-        $blocked_till = Carbon::createFromTimestamp(auth()->user()->blocked_till);
-        return view('blocked',['blocked_till' => $blocked_till]);
+        return auth()->user()->blocked ? view('blocked') : redirect('/');
     })->name('blocked');
     // Route::get('/dashboard', function() {
     //     return Inertia::render('Dashboard');

@@ -40,9 +40,9 @@ class PostService
 	protected function validator(array $data)
     {
         return Validator::make($data, [
-            'title' => 'required|text|min:3|max:255',
-			'content' => 'required|text',
-			'url' => 'required|min:3|max:255',
+            'title' => 'required|string|min:3|max:255',
+			'content' => 'required|string',
+			'url' => 'required|string|min:3|max:255',
         ]);
     }
 }

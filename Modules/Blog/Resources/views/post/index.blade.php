@@ -2,6 +2,16 @@
 
 @section('content')
     <div class="container">
+        @if (session('success'))
+            <div class="row">
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            </div>
+        @endif
+        <div class="row">
+            <a class="p-4" href="{{ route('post.create') }}">Dodaj post</a>
+        </div>
         <div class="row">
             <div class="col-md-7 offset-3 mt-4">
                 <table>

@@ -5,6 +5,8 @@ namespace Modules\Mail\Services;
 use InvalidArgumentException;
 use Validator;
 
+use Illuminate\Support\Facades\Storage;
+
 use Modules\Mail\Entities\Mail;  
 use Modules\Mail\Jobs\SendMail;
 
@@ -23,6 +25,8 @@ class MailService
 		$mail->recipient = $data['recipient'];
 		$mail->title = $data['title'];
 		$mail->content = $data['content'];
+		$mail->attachments = Storage::disk('public')->put('attachments',$data['attachment']);
+		//$mail->attachments = basename( $data['attachment']->store('public/attachments'));
 		$mail->save();
         $this->addToQueue($mail);
 		return $mail->fresh();

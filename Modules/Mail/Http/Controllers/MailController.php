@@ -33,6 +33,8 @@ class MailController extends Controller
      */
     public function index()
     {
+        //dd(public_path('storage'));
+        //dd(storage_path('app').'/public/attachments/j95CpDUFXm1IbkGxU1vKQCmntqBjUAeCZcyHeVCp.pdf');
         return view('mail::index');
     }
 
@@ -58,6 +60,11 @@ class MailController extends Controller
             'title',
             'content',
         ]);
+
+        $data['attachment'] = $request->file('attachment');
+
+        //dump($request);
+        //dd($data);
 
         $mail = $this->mailService->sendMail($data);
         

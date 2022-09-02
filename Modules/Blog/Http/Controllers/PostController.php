@@ -35,7 +35,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = $this->postServices->getAll();
+        $posts = $this->postService->getAll();
         return view('blog::post.index', compact('posts'));
     }
 
@@ -63,7 +63,7 @@ class PostController extends Controller
 
         $post = $this->postService->add($data);
 
-        return redirect()->back()->with(['success' => 'Udalo sie']); 
+        return redirect()->route('post.index')->with(['success' => 'Udalo sie']); 
     }
 
     /**
